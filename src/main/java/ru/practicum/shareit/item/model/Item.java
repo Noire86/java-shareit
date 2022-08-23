@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Value;
 
 /**
- * // TODO .
+ * // Базовая модель итема
  */
 @Value
 @Builder(toBuilder = true)

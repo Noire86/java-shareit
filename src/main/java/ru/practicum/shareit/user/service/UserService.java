@@ -4,6 +4,9 @@ import ru.practicum.shareit.user.dto.UserDto;
 
 import java.util.Collection;
 
+/**
+ * Интерфейс сервиса пользователей
+ */
 public interface UserService {
     Collection<UserDto> getUsers();
 

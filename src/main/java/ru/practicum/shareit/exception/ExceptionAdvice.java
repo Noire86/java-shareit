@@ -9,6 +9,9 @@ import ru.practicum.shareit.exception.model.ExceptionResponse;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Эдвайс для обработки исключений и их вывода в response
+ */
 @Slf4j
 @ControllerAdvice
 public class ExceptionAdvice {

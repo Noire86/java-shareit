@@ -7,7 +7,7 @@ import ru.practicum.shareit.user.User;
 import java.time.LocalDateTime;
 
 /**
- * // TODO .
+ * // Ожидает реализации
  */
 @Value
 @Builder(toBuilder = true)

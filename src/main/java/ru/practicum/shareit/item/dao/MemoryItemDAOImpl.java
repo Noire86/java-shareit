@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Реализация ДАО репозитория итемов с хранением в памяти
+ */
 @Component
 public class MemoryItemDAOImpl implements ItemDAO {
 

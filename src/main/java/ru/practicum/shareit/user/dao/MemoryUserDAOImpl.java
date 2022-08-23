@@ -9,6 +9,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Реализация репозитория пользователей с хранением в памяти
+ */
 @Repository
 public class MemoryUserDAOImpl implements UserDAO {
 

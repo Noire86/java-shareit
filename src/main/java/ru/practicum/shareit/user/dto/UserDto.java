@@ -5,6 +5,9 @@ import lombok.Value;
 
 import javax.validation.constraints.Email;
 
+/**
+ * ДТО-модель пользователя
+ */
 @Value
 @Builder(toBuilder = true)
 public class UserDto {

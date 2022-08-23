@@ -4,6 +4,9 @@ import ru.practicum.shareit.item.model.Item;
 
 import java.util.Collection;
 
+/**
+ * Интерфейс для репозитория Item-ов
+ */
 public interface ItemDAO {
     Item addItem(Integer ownerId, Item item);
 

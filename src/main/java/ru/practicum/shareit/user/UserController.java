@@ -13,7 +13,7 @@ import ru.practicum.shareit.user.service.UserService;
 import java.util.Collection;
 
 /**
- * // TODO .
+ * // Контроллер эндпоинтов приложения, связанных с пользователями
  */
 @RestController
 @RequiredArgsConstructor

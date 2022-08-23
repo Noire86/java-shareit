@@ -11,7 +11,7 @@ import ru.practicum.shareit.item.service.ItemService;
 import java.util.Collection;
 
 /**
- * // TODO .
+ * // Контроллер для эндпоинтов приложения, связанных с функционалом итемов
  */
 @RestController
 @RequiredArgsConstructor

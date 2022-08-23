@@ -13,6 +13,9 @@ import ru.practicum.shareit.user.mapper.UserMapper;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+/**
+ * Реализация сервиса пользователей
+ */
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {

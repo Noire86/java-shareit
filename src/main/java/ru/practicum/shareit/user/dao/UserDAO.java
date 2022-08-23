@@ -4,6 +4,9 @@ import ru.practicum.shareit.user.User;
 
 import java.util.Collection;
 
+/**
+ * Интерфейс репозитория пользователей
+ */
 public interface UserDAO {
     User createUser(User user);
 

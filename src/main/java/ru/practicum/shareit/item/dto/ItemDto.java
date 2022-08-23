@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Value;
 
 /**
- * // TODO .
+ * // DTO-модель для итема
  */
 
 @Value

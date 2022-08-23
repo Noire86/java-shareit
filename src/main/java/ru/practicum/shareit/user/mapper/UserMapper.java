@@ -3,6 +3,9 @@ package ru.practicum.shareit.user.mapper;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dto.UserDto;
 
+/**
+ * Маппер-класс для пользователей
+ */
 public class UserMapper {
     public static UserDto toUserDto(User user) {
         return UserDto.builder()

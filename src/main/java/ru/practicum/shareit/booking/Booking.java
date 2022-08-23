@@ -9,7 +9,7 @@ import ru.practicum.shareit.util.Status;
 import java.time.LocalDateTime;
 
 /**
- * // TODO .
+ * // Модель бронирования
  */
 @Value
 @Builder(toBuilder = true)

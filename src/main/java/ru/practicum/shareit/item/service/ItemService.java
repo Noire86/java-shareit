@@ -4,6 +4,9 @@ import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.util.Collection;
 
+/**
+ * Интерфейс для сервиса итемов
+ */
 public interface ItemService {
 
     ItemDto addItem(Integer ownerId, ItemDto item);
