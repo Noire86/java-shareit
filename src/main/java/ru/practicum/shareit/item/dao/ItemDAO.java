@@ -7,9 +7,9 @@ import java.util.Collection;
 import java.util.stream.Collector;
 
 public interface ItemDAO {
-    ItemDto addItem(Integer ownerId, ItemDto item);
-    ItemDto amendItem(Integer ownerId, Integer itemId, ItemDto item);
-    ItemDto getItem(Integer itemId);
-    Collection<ItemDto> getAllItemsByOwner(Integer ownerId);
-    Collection<ItemDto> search(String searchQuery);
+    Item addItem(Integer ownerId, Item item);
+    Item amendItem(Integer itemId, Item item);
+    Item getItem(Integer itemId);
+    Collection<Item> getAllItemsByOwner(Integer ownerId);
+    Collection<Item> search(String searchQuery);
 }

@@ -15,7 +15,7 @@ public class ExceptionAdvice {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
-    @ExceptionHandler({ValidationException.class, StorageException.class})
+    @ExceptionHandler({ValidationException.class, StorageException.class, AccessViolationException.class})
     public ResponseEntity<ExceptionResponse> handleValidationException(CommonException ex) {
         ExceptionResponse response = ExceptionResponse.builder()
                 .message(ex.getMessage())

@@ -6,11 +6,13 @@ import ru.practicum.shareit.user.dto.UserDto;
 import java.util.Collection;
 
 public interface UserDAO {
-    UserDto createUser(UserDto userDto);
+    User createUser(User user);
 
-    UserDto getUserById(Integer id);
+    User getUserById(Integer userId);
 
-    Collection<UserDto> getAllUsers();
+    Collection<User> getAllUsers();
 
-    UserDto update(Integer id, UserDto userDto);
+    User update(Integer userId, User user);
+
+    void delete(Integer userId);
 }

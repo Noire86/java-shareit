@@ -2,7 +2,9 @@ package ru.practicum.shareit.user;
 
 import lombok.Builder;
 import lombok.Value;
-import ru.practicum.shareit.validation.annotations.UniqueEmail;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
 /**
  * // TODO .
@@ -11,7 +13,8 @@ import ru.practicum.shareit.validation.annotations.UniqueEmail;
 @Builder(toBuilder = true)
 public class User {
     Integer id;
+    @NotNull
     String name;
-    @UniqueEmail
+    @Email
     String email;
 }
