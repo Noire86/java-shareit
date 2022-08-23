@@ -4,8 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.exception.StorageException;
 import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.mapper.UserMapper;
 
 import java.util.Collection;
 import java.util.HashMap;

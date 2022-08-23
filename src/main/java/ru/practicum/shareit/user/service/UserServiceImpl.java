@@ -8,7 +8,6 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.User.UserBuilder;
 import ru.practicum.shareit.user.dao.UserDAO;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.dto.UserDto.UserDtoBuilder;
 import ru.practicum.shareit.user.mapper.UserMapper;
 
 import java.util.Collection;
