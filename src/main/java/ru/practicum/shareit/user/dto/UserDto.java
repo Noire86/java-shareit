@@ -1,19 +1,17 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.user.dto;
 
 import lombok.Builder;
 import lombok.Value;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 
 /**
- * // Базовая модель пользователя
+ * ДТО-модель пользователя
  */
 @Value
 @Builder(toBuilder = true)
-public class User {
+public class UserDto {
     Integer id;
-    @NotNull
     String name;
     @Email
     String email;

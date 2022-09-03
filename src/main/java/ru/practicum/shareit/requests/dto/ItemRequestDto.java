@@ -1,7 +1,7 @@
 package ru.practicum.shareit.requests.dto;
 
 /**
- * // TODO .
+ * // Ожидает реализации
  */
 public class ItemRequestDto {
 }
