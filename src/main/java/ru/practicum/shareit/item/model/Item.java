@@ -1,21 +1,40 @@
 package ru.practicum.shareit.item.model;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
+import ru.practicum.shareit.user.User;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * // Базовая модель итема
  */
-@Value
-@Builder(toBuilder = true)
+@Getter
+@Setter
+@ToString
+@Entity
+@Table(name = "items", schema = "public")
 public class Item {
 
-    Integer id;
-    String name;
-    String description;
-    Boolean available;
-    Integer owner;
-    String request;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column
+    private String name;
+
+    @Column
+    private String description;
+
+    @Column
+    @NotNull
+    private Boolean available;
+
+    @Column
+    private Integer owner;
+
+    @Column
+    private Integer request;
 
 
 }

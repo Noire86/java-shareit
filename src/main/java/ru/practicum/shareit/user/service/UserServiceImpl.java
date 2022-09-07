@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.User.UserBuilder;
 import ru.practicum.shareit.user.dao.UserDAO;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
@@ -24,7 +23,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Collection<UserDto> getUsers() {
-        return userDAO.getAllUsers()
+        return userDAO.findAll()
                 .stream()
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
@@ -32,54 +31,53 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUser(Integer userId) {
-        return UserMapper.toUserDto(userDAO.getUserById(userId));
+        return UserMapper.toUserDto(userDAO.getReferenceById(userId));
     }
 
     @Override
     public UserDto updateUser(Integer userId, UserDto userDto) {
-        User user = userDAO.getUserById(userId);
-        UserBuilder builder = user.toBuilder();
+        User user = userDAO.getReferenceById(userId);
 
         if (userDto.getName() != null) {
-            builder.name(userDto.getName());
+            user.setName(userDto.getName());
         }
 
         if (userDto.getEmail() != null) {
             if (emailIsValid(userDto.getEmail())) {
-                builder.email(userDto.getEmail());
+                user.setEmail(userDto.getEmail());
             } else {
                 throw new ValidationException(String.format("User with email %s already exists!", user.getEmail()), HttpStatus.CONFLICT);
             }
         }
 
-        return UserMapper.toUserDto(userDAO.update(userId, builder.build()));
+        return UserMapper.toUserDto(userDAO.save(user));
     }
 
     @Override
     public UserDto createUser(UserDto userDto) {
         User user = UserMapper.toUser(userDto);
 
-        if (emailIsValid(user.getEmail())) {
+        //if (emailIsValid(user.getEmail())) {
             if (user.getEmail() != null && !user.getEmail().isEmpty()) {
-                return UserMapper.toUserDto(userDAO.createUser(user));
+                return UserMapper.toUserDto(userDAO.save(user));
 
             } else {
                 throw new ValidationException("User email cannot be empty or null", HttpStatus.BAD_REQUEST);
             }
 
-        } else {
-            throw new ValidationException(String.format("User with email %s already exists!", user.getEmail()), HttpStatus.CONFLICT);
-        }
+//        } else {
+//            throw new ValidationException(String.format("User with email %s already exists!", user.getEmail()), HttpStatus.CONFLICT);
+//        }
     }
 
     @Override
     public void deleteUser(Integer userId) {
-        userDAO.delete(userId);
+        userDAO.deleteById(userId);
     }
 
 
     private boolean emailIsValid(String email) {
-        return userDAO.getAllUsers()
+        return userDAO.findAll()
                 .stream()
                 .map(User::getEmail)
                 .noneMatch(str -> str.equals(email));

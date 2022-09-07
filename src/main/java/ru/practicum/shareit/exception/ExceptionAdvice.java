@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.practicum.shareit.exception.model.ExceptionResponse;
 
+import javax.persistence.EntityNotFoundException;
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -18,7 +20,12 @@ public class ExceptionAdvice {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
-    @ExceptionHandler({ValidationException.class, StorageException.class, AccessViolationException.class})
+    @ExceptionHandler({
+            ValidationException.class,
+            StorageException.class,
+            AccessViolationException.class,
+            EntityNotFoundException.class
+    })
     public ResponseEntity<ExceptionResponse> handleValidationException(CommonException ex) {
         ExceptionResponse response = ExceptionResponse.builder()
                 .message(ex.getMessage())
