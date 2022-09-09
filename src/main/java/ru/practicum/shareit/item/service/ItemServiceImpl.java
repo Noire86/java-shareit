@@ -9,6 +9,8 @@ import ru.practicum.shareit.item.dao.ItemDAO;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.user.dao.UserDAO;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -21,12 +23,13 @@ import java.util.stream.Collectors;
 public class ItemServiceImpl implements ItemService {
 
     private final ItemDAO itemDAO;
+    private final UserDAO userDAO;
 
     @Override
     public ItemDto addItem(Integer ownerId, ItemDto item) {
         validate(item);
-        Item result = ItemMapper.toItem(item, ownerId);
-        result.setOwner(ownerId);
+        User owner = userDAO.getReferenceById(ownerId);
+        Item result = ItemMapper.toItem(item, owner.getId());
 
         return ItemMapper.toItemDto(itemDAO.save(result));
     }
