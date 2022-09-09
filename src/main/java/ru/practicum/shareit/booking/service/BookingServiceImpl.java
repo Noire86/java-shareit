@@ -17,6 +17,7 @@ import ru.practicum.shareit.user.dao.UserDAO;
 import ru.practicum.shareit.util.State;
 import ru.practicum.shareit.util.Status;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,14 +34,14 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingDto create(Integer userId, BookingCreationDto bookingCreationDto) {
         Booking booking = new Booking();
-        User booker = userDAO.getReferenceById(userId);
-        Item item = itemDAO.getReferenceById(bookingCreationDto.getItemId());
+        User booker = userDAO.findById(userId).orElseThrow(EntityNotFoundException::new);
+        Item item = itemDAO.findById(bookingCreationDto.getItemId()).orElseThrow(EntityNotFoundException::new);
         LocalDateTime start = bookingCreationDto.getStart();
         LocalDateTime end = bookingCreationDto.getEnd();
 
         if (!item.getAvailable()) {
             throw new ValidationException(String.format("Item with ID %d is not available for booking!", item.getId()),
-                    HttpStatus.FORBIDDEN);
+                    HttpStatus.BAD_REQUEST);
         }
 
         if (item.getOwner().equals(booker.getId())) {

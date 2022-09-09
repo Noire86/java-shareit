@@ -12,6 +12,8 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dao.UserDAO;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -28,7 +30,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto addItem(Integer ownerId, ItemDto item) {
         validate(item);
-        User owner = userDAO.getReferenceById(ownerId);
+        User owner = userDAO.findById(ownerId).orElseThrow(EntityNotFoundException::new);
         Item result = ItemMapper.toItem(item, owner.getId());
 
         return ItemMapper.toItemDto(itemDAO.save(result));
@@ -73,6 +75,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Collection<ItemDto> search(String searchQuery) {
+        if (searchQuery.isEmpty()) return new ArrayList<>();
         return itemDAO.findAllByNameOrDescriptionContainingIgnoreCaseAndAvailableIsTrue(searchQuery, searchQuery)
                 .stream()
                 .map(ItemMapper::toItemDto)
