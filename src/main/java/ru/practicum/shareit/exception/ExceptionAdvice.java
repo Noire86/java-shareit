@@ -28,7 +28,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     })
     public ResponseEntity<ExceptionResponse> handleCommonException(CommonException ex) {
         ExceptionResponse response = ExceptionResponse.builder()
-                .message(ex.getMessage())
+                .error(ex.getMessage())
                 .exceptionType(ex.getClass().getSimpleName())
                 .timestamp(String.format("[%s]", LocalDateTime.now().format(formatter)))
                 .statusCode(String.format("%s: %s", ex.getCode().value(), ex.getCode().getReasonPhrase()))
@@ -41,7 +41,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleEntityNotFoundException(EntityNotFoundException ex) {
         ExceptionResponse response = ExceptionResponse.builder()
-                .message(ex.getMessage())
+                .error(ex.getMessage())
                 .exceptionType(ex.getClass().getSimpleName())
                 .timestamp(String.format("[%s]", LocalDateTime.now().format(formatter)))
                 .statusCode(String.format("%s: %s", HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase()))

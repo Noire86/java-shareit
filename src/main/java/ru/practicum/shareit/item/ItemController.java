@@ -6,6 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemExtendedDto;
+import ru.practicum.shareit.item.model.CommentCreationDto;
+import ru.practicum.shareit.item.model.CommentDto;
 import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.Collection;
@@ -36,17 +39,28 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ResponseEntity<ItemDto> getItem(@PathVariable Integer itemId) {
-        return new ResponseEntity<>(itemService.getItem(itemId), HttpStatus.OK);
+    public ResponseEntity<ItemExtendedDto> getItem(
+            @RequestHeader("X-Sharer-User-Id") Integer userId,
+            @PathVariable Integer itemId) {
+        return new ResponseEntity<>(itemService.getItem(userId, itemId), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<Collection<ItemDto>> getAllItemsByOwner(@RequestHeader("X-Sharer-User-Id") Integer userId) {
+    public ResponseEntity<Collection<ItemExtendedDto>> getAllItemsByOwner(@RequestHeader("X-Sharer-User-Id") Integer userId) {
         return new ResponseEntity<>(itemService.getAllItemsByOwner(userId), HttpStatus.OK);
     }
 
     @GetMapping("/search")
     public ResponseEntity<Collection<ItemDto>> searchItem(@RequestParam(name = "text") String text) {
         return new ResponseEntity<>(itemService.search(text), HttpStatus.OK);
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public ResponseEntity<CommentDto> addNewComment(
+            @RequestHeader("X-Sharer-User-Id") Integer commenterId,
+            @PathVariable Integer itemId,
+            @RequestBody @Validated CommentCreationDto commentCreationDto) {
+
+        return new ResponseEntity<>(itemService.addNewComment(commenterId, itemId, commentCreationDto), HttpStatus.OK);
     }
 }

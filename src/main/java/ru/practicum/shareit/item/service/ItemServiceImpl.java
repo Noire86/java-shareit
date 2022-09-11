@@ -1,20 +1,29 @@
 package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.booking.dao.BookingDAO;
+import ru.practicum.shareit.booking.dto.BookingItemDto;
+import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.exception.AccessViolationException;
 import ru.practicum.shareit.exception.ValidationException;
+import ru.practicum.shareit.item.dao.CommentDAO;
 import ru.practicum.shareit.item.dao.ItemDAO;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemExtendedDto;
+import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
-import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.model.*;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dao.UserDAO;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -26,6 +35,8 @@ public class ItemServiceImpl implements ItemService {
 
     private final ItemDAO itemDAO;
     private final UserDAO userDAO;
+    private final BookingDAO bookingDAO;
+    private final CommentDAO commentDAO;
 
     @Override
     public ItemDto addItem(Integer ownerId, ItemDto item) {
@@ -61,15 +72,38 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto getItem(Integer itemId) {
-        return ItemMapper.toItemDto(itemDAO.getReferenceById(itemId));
+    public ItemExtendedDto getItem(Integer userId, Integer itemId) {
+        Item item = itemDAO.findById(itemId).orElseThrow(EntityNotFoundException::new);
+        boolean isOwner = item.getOwner().equals(userId);
+
+        ItemExtendedDto result = ItemMapper.toItemExtendedDto(item);
+
+        BookingItemDto nextBooking = BookingMapper.toBookingItemInfoDto(
+                bookingDAO.getNextBooking(itemId, LocalDateTime.now(), PageRequest.of(0, 1)).get(0));
+
+        BookingItemDto lastBooking = BookingMapper.toBookingItemInfoDto(
+                bookingDAO.getLastBooking(itemId, LocalDateTime.now(), PageRequest.of(0, 1)).get(0));
+
+        List<CommentItemDto> comments = commentDAO.getCommentsByItemId(itemId)
+                .stream()
+                .map(CommentMapper::toCommentItemDto)
+                .collect(Collectors.toList());
+
+        result = result.toBuilder()
+                .comments(comments)
+                .lastBooking(isOwner ? lastBooking : null)
+                .nextBooking(isOwner ? nextBooking : null)
+                .build();
+
+        return result;
+
     }
 
     @Override
-    public Collection<ItemDto> getAllItemsByOwner(Integer ownerId) {
+    public Collection<ItemExtendedDto> getAllItemsByOwner(Integer ownerId) {
         return itemDAO.findByOwnerEquals(ownerId)
                 .stream()
-                .map(ItemMapper::toItemDto)
+                .map(i -> getItem(ownerId, i.getId()))
                 .collect(Collectors.toList());
     }
 
@@ -80,6 +114,27 @@ public class ItemServiceImpl implements ItemService {
                 .stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public CommentDto addNewComment(Integer commenterId, Integer itemId, CommentCreationDto commentCreationDto) {
+        Comment comment = CommentMapper.toComment(commentCreationDto);
+        User commenter = userDAO.findById(commenterId).orElseThrow(EntityNotFoundException::new);
+        Item item = itemDAO.findById(itemId).orElseThrow(EntityNotFoundException::new);
+
+        if (bookingDAO.findUserBookingsByItem(commenterId, itemId).size() < 1) {
+            throw new AccessViolationException("This user cannot leave a comment, because he has never booked this item",
+                    HttpStatus.FORBIDDEN);
+        }
+
+        if (commentCreationDto.getText().isEmpty()) throw new ValidationException("Empty comment text!", HttpStatus.BAD_REQUEST);
+
+        comment.setAuthor(commenter);
+        comment.setItem(item);
+        comment.setCreated(LocalDateTime.now());
+
+        return CommentMapper.toCommentDto(comment);
+
     }
 
     private boolean validate(ItemDto item) {

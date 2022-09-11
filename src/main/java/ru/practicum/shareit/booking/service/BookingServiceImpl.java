@@ -45,7 +45,7 @@ public class BookingServiceImpl implements BookingService {
         }
 
         if (item.getOwner().equals(booker.getId())) {
-            throw new ValidationException("Cannot create booking as an item owner", HttpStatus.BAD_REQUEST);
+            throw new ValidationException("Cannot create booking as an item owner", HttpStatus.NOT_FOUND);
         }
 
         if (start.isBefore(LocalDateTime.now())) {
@@ -73,47 +73,47 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto findBookingById(Integer userId, Integer bookingId) {
-        Booking booking = bookingDAO.getReferenceById(bookingId);
-        User user = userDAO.getReferenceById(userId);
+        Booking booking = bookingDAO.findById(bookingId).orElseThrow(EntityNotFoundException::new);
+        User owner = userDAO.findById(booking.getItem().getOwner()).orElseThrow(EntityNotFoundException::new);
         User booker = booking.getBooker();
 
-        if (!user.getId().equals(userId) && !booker.getId().equals(userId)) {
+        if (!booker.getId().equals(userId) && !owner.getId().equals(userId)) {
             throw new AccessViolationException("You must be an owner or a respective booker to access this booking",
-                    HttpStatus.FORBIDDEN);
+                    HttpStatus.NOT_FOUND);
         }
 
         return BookingMapper.toBookingDto(booking);
     }
 
     @Override
-    public List<BookingDto> getRequestorBookings(Integer userId, State state) {
-        User booker = userDAO.getReferenceById(userId);
+    public List<BookingDto> getRequestorBookings(Integer userId, String state) {
+        User booker = userDAO.findById(userId).orElseThrow(EntityNotFoundException::new);
         List<Booking> bookingList = new ArrayList<>();
 
-        switch (state) {
-            case ALL:
-                bookingList.addAll(bookingDAO.findBookerBookings(booker.getId()));
-                break;
-            case PAST:
-                bookingList.addAll(bookingDAO.findBookerBookingsFromPast(booker.getId(), LocalDateTime.now()));
-                break;
-            case FUTURE:
-                bookingList.addAll(bookingDAO.findBookerBookingsFromFuture(booker.getId(), LocalDateTime.now()));
-                break;
-            case CURRENT:
-                bookingList.addAll(bookingDAO.findBookerCurrentBookings(booker.getId(), LocalDateTime.now()));
-                break;
-            case WAITING:
-                bookingList.addAll(bookingDAO.findBookerBookingsByStatus(booker.getId(), Status.WAITING));
-                break;
-            case REJECTED:
-                bookingList.addAll(bookingDAO.findBookerBookingsByStatus(booker.getId(), Status.REJECTED));
-                break;
-
-            default:
-                throw new ValidationException(
-                        String.format("Error: the state %s is not supported in this request!", state.name()),
-                        HttpStatus.BAD_REQUEST);
+        try {
+            State stateEnum = State.valueOf(state);
+            switch (stateEnum) {
+                case ALL:
+                    bookingList.addAll(bookingDAO.findBookerBookings(booker.getId()));
+                    break;
+                case PAST:
+                    bookingList.addAll(bookingDAO.findBookerBookingsFromPast(booker.getId(), LocalDateTime.now()));
+                    break;
+                case FUTURE:
+                    bookingList.addAll(bookingDAO.findBookerBookingsFromFuture(booker.getId(), LocalDateTime.now()));
+                    break;
+                case CURRENT:
+                    bookingList.addAll(bookingDAO.findBookerCurrentBookings(booker.getId(), LocalDateTime.now()));
+                    break;
+                case WAITING:
+                    bookingList.addAll(bookingDAO.findBookerBookingsByStatus(booker.getId(), Status.WAITING));
+                    break;
+                case REJECTED:
+                    bookingList.addAll(bookingDAO.findBookerBookingsByStatus(booker.getId(), Status.REJECTED));
+                    break;
+            }
+        } catch (IllegalArgumentException ex) {
+            throw new ValidationException(String.format("Unknown state: %s", state), HttpStatus.BAD_REQUEST);
         }
 
         return bookingList
@@ -123,34 +123,34 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDto> getOwnerBookings(Integer userId, State state) {
-        User owner = userDAO.getReferenceById(userId);
+    public List<BookingDto> getOwnerBookings(Integer userId, String state) {
+        User owner = userDAO.findById(userId).orElseThrow(EntityNotFoundException::new);
         List<Booking> bookingList = new ArrayList<>();
 
-        switch (state) {
-            case ALL:
-                bookingList.addAll(bookingDAO.findOwnerBookings(owner.getId()));
-                break;
-            case PAST:
-                bookingList.addAll(bookingDAO.findOwnerBookingsFromPast(owner.getId(), LocalDateTime.now()));
-                break;
-            case FUTURE:
-                bookingList.addAll(bookingDAO.findOwnerBookingsFromFuture(owner.getId(), LocalDateTime.now()));
-                break;
-            case CURRENT:
-                bookingList.addAll(bookingDAO.findOwnerCurrentBookings(owner.getId(), LocalDateTime.now()));
-                break;
-            case WAITING:
-                bookingList.addAll(bookingDAO.findOwnerBookingsByStatus(owner.getId(), Status.WAITING));
-                break;
-            case REJECTED:
-                bookingList.addAll(bookingDAO.findOwnerBookingsByStatus(owner.getId(), Status.REJECTED));
-                break;
-
-            default:
-                throw new ValidationException(
-                        String.format("Error: the state %s is not supported in this request!", state.name()),
-                        HttpStatus.BAD_REQUEST);
+        try {
+            State stateEnum = State.valueOf(state);
+            switch (stateEnum) {
+                case ALL:
+                    bookingList.addAll(bookingDAO.findOwnerBookings(owner.getId()));
+                    break;
+                case PAST:
+                    bookingList.addAll(bookingDAO.findOwnerBookingsFromPast(owner.getId(), LocalDateTime.now()));
+                    break;
+                case FUTURE:
+                    bookingList.addAll(bookingDAO.findOwnerBookingsFromFuture(owner.getId(), LocalDateTime.now()));
+                    break;
+                case CURRENT:
+                    bookingList.addAll(bookingDAO.findOwnerCurrentBookings(owner.getId(), LocalDateTime.now()));
+                    break;
+                case WAITING:
+                    bookingList.addAll(bookingDAO.findOwnerBookingsByStatus(owner.getId(), Status.WAITING));
+                    break;
+                case REJECTED:
+                    bookingList.addAll(bookingDAO.findOwnerBookingsByStatus(owner.getId(), Status.REJECTED));
+                    break;
+            }
+        } catch (IllegalArgumentException ex) {
+            throw new ValidationException(String.format("Unknown state: %s", state), HttpStatus.BAD_REQUEST);
         }
 
         return bookingList
@@ -168,7 +168,7 @@ public class BookingServiceImpl implements BookingService {
         if (!user.getId().equals(item.getOwner())) {
             throw new ValidationException(
                     String.format("Item with ID %d does not belong to User with ID %d", item.getId(), user.getId()),
-                    HttpStatus.FORBIDDEN);
+                    HttpStatus.NOT_FOUND);
         }
 
         if (booking.getStatus().equals(Status.APPROVED)) {

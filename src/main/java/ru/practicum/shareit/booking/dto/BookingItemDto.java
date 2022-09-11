@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Value
 @Builder(toBuilder = true)
-public class BookingItemInfoDto {
+public class BookingItemDto {
     Integer id;
     Integer bookerId;
 }
