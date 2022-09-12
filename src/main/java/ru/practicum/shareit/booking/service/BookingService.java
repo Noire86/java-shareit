@@ -8,6 +8,9 @@ import ru.practicum.shareit.util.Status;
 
 import java.util.List;
 
+/**
+ * Сервисный интерфейс бронирования
+ */
 public interface BookingService {
 
     BookingDto create(Integer userId, BookingCreationDto bookingDto);

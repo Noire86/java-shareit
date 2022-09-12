@@ -4,6 +4,9 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+/**
+ * DTO для представления комментария в объекте вещи
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

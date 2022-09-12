@@ -8,7 +8,7 @@ import ru.practicum.shareit.util.Status;
 import java.time.LocalDateTime;
 
 /**
- * // Ожидает реализации
+ * Основной DTO для бронирования
  */
 @Data
 @AllArgsConstructor

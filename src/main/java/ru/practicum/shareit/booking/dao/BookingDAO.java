@@ -8,6 +8,9 @@ import ru.practicum.shareit.util.Status;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Репозиторий для бронирований
+ */
 public interface BookingDAO extends JpaRepository<Booking, Integer> {
 
     @Query("select bk from Booking bk join Item i on i.id = bk.item.id where i.owner = ?1 order by bk.start desc")

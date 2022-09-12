@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Сервис для бронирований
+ */
 @Service
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {

@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * Эдвайс для обработки исключений и их вывода в response
+ * Добавлен новый хендлер исключения
  */
 @Slf4j
 @ControllerAdvice

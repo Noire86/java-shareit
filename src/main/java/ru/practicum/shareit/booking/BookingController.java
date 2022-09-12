@@ -13,7 +13,7 @@ import ru.practicum.shareit.util.State;
 import java.util.List;
 
 /**
- * // Ожидает реализации
+ * // Контроллер для бронирований
  */
 @RestController
 @RequiredArgsConstructor

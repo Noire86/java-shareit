@@ -7,6 +7,9 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * Базовый DTO комментария
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

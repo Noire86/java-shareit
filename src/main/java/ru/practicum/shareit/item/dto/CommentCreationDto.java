@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+/**
+ * DTO для создания комментария
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

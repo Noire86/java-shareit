@@ -2,6 +2,9 @@ package ru.practicum.shareit.booking.dto;
 
 import lombok.*;
 
+/**
+ * DTO для отображения бронирования в объекте вещи
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
