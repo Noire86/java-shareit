@@ -1,9 +1,9 @@
 package ru.practicum.shareit.item.mapper;
 
+import ru.practicum.shareit.item.dto.CommentCreationDto;
 import ru.practicum.shareit.item.model.Comment;
-import ru.practicum.shareit.item.model.CommentCreationDto;
-import ru.practicum.shareit.item.model.CommentDto;
-import ru.practicum.shareit.item.model.CommentItemDto;
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.CommentItemDto;
 
 public class CommentMapper {
 
@@ -11,8 +11,8 @@ public class CommentMapper {
         return CommentDto.builder()
                 .id(comment.getId())
                 .text(comment.getText())
-                .itemId(comment.getItem().getId())
-                .authorId(comment.getAuthor().getId())
+                .item(comment.getItem())
+                .authorName(comment.getAuthor().getName())
                 .created(comment.getCreated())
                 .build();
     }

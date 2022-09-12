@@ -1,18 +1,16 @@
 package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dao.BookingDAO;
-import ru.practicum.shareit.booking.dto.BookingItemDto;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
+import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.exception.AccessViolationException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dao.CommentDAO;
 import ru.practicum.shareit.item.dao.ItemDAO;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemExtendedDto;
+import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.*;
@@ -77,12 +75,8 @@ public class ItemServiceImpl implements ItemService {
         boolean isOwner = item.getOwner().equals(userId);
 
         ItemExtendedDto result = ItemMapper.toItemExtendedDto(item);
-
-        BookingItemDto nextBooking = BookingMapper.toBookingItemInfoDto(
-                bookingDAO.getNextBooking(itemId, LocalDateTime.now(), PageRequest.of(0, 1)).get(0));
-
-        BookingItemDto lastBooking = BookingMapper.toBookingItemInfoDto(
-                bookingDAO.getLastBooking(itemId, LocalDateTime.now(), PageRequest.of(0, 1)).get(0));
+        List<Booking> nextBooking = bookingDAO.getNextBooking(itemId);
+        List<Booking> lastBooking = bookingDAO.getLastBooking(itemId);
 
         List<CommentItemDto> comments = commentDAO.getCommentsByItemId(itemId)
                 .stream()
@@ -91,8 +85,8 @@ public class ItemServiceImpl implements ItemService {
 
         result = result.toBuilder()
                 .comments(comments)
-                .lastBooking(isOwner ? lastBooking : null)
-                .nextBooking(isOwner ? nextBooking : null)
+                .lastBooking(isOwner && lastBooking.size() > 0 ? BookingMapper.toBookingItemInfoDto(lastBooking.get(0)) : null)
+                .nextBooking(isOwner && nextBooking.size() > 0 ? BookingMapper.toBookingItemInfoDto(nextBooking.get(0)) : null)
                 .build();
 
         return result;
@@ -122,9 +116,14 @@ public class ItemServiceImpl implements ItemService {
         User commenter = userDAO.findById(commenterId).orElseThrow(EntityNotFoundException::new);
         Item item = itemDAO.findById(itemId).orElseThrow(EntityNotFoundException::new);
 
-        if (bookingDAO.findUserBookingsByItem(commenterId, itemId).size() < 1) {
+        if (bookingDAO.findValidUserBookingsByItem(commenterId, itemId).size() < 1) {
             throw new AccessViolationException("This user cannot leave a comment, because he has never booked this item",
-                    HttpStatus.FORBIDDEN);
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        if (!item.getAvailable()) {
+            throw new ValidationException("You cannot leave comment for unavailable item booking",
+                    HttpStatus.BAD_REQUEST);
         }
 
         if (commentCreationDto.getText().isEmpty()) throw new ValidationException("Empty comment text!", HttpStatus.BAD_REQUEST);
@@ -133,7 +132,7 @@ public class ItemServiceImpl implements ItemService {
         comment.setItem(item);
         comment.setCreated(LocalDateTime.now());
 
-        return CommentMapper.toCommentDto(comment);
+        return CommentMapper.toCommentDto(commentDAO.save(comment));
 
     }
 

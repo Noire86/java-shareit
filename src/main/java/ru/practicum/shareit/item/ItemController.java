@@ -1,14 +1,15 @@
 package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.dto.CommentCreationDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemExtendedDto;
-import ru.practicum.shareit.item.model.CommentCreationDto;
-import ru.practicum.shareit.item.model.CommentDto;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.Collection;
@@ -19,6 +20,7 @@ import java.util.Collection;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/items")
+@Slf4j
 public class ItemController {
 
     private final ItemService itemService;
@@ -57,10 +59,10 @@ public class ItemController {
 
     @PostMapping("/{itemId}/comment")
     public ResponseEntity<CommentDto> addNewComment(
-            @RequestHeader("X-Sharer-User-Id") Integer commenterId,
+            @RequestHeader("X-Sharer-User-Id") Integer userId,
             @PathVariable Integer itemId,
             @RequestBody @Validated CommentCreationDto commentCreationDto) {
 
-        return new ResponseEntity<>(itemService.addNewComment(commenterId, itemId, commentCreationDto), HttpStatus.OK);
+        return new ResponseEntity<>(itemService.addNewComment(userId, itemId, commentCreationDto), HttpStatus.OK);
     }
 }
