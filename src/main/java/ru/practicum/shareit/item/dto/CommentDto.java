@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class CommentDto implements Serializable {
+public class CommentDto {
     private Integer id;
     private String text;
     private Item item;
