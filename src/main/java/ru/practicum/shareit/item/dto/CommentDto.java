@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.model.Item;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
