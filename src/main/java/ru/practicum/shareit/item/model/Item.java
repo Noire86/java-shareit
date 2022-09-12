@@ -1,7 +1,8 @@
 package ru.practicum.shareit.item.model;
 
-import lombok.*;
-import ru.practicum.shareit.user.User;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

@@ -57,12 +57,12 @@ public class UserServiceImpl implements UserService {
     public UserDto createUser(UserDto userDto) {
         User user = UserMapper.toUser(userDto);
 
-            if (user.getEmail() != null && !user.getEmail().isEmpty()) {
-                return UserMapper.toUserDto(userDAO.save(user));
+        if (user.getEmail() != null && !user.getEmail().isEmpty()) {
+            return UserMapper.toUserDto(userDAO.save(user));
 
-            } else {
-                throw new ValidationException("User email cannot be empty or null", HttpStatus.BAD_REQUEST);
-            }
+        } else {
+            throw new ValidationException("User email cannot be empty or null", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Override

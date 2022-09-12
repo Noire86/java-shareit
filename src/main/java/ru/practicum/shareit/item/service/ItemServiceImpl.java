@@ -13,7 +13,8 @@ import ru.practicum.shareit.item.dao.ItemDAO;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
-import ru.practicum.shareit.item.model.*;
+import ru.practicum.shareit.item.model.Comment;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dao.UserDAO;
 
@@ -126,7 +127,8 @@ public class ItemServiceImpl implements ItemService {
                     HttpStatus.BAD_REQUEST);
         }
 
-        if (commentCreationDto.getText().isEmpty()) throw new ValidationException("Empty comment text!", HttpStatus.BAD_REQUEST);
+        if (commentCreationDto.getText().isEmpty())
+            throw new ValidationException("Empty comment text!", HttpStatus.BAD_REQUEST);
 
         comment.setAuthor(commenter);
         comment.setItem(item);
