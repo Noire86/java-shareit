@@ -1,20 +1,11 @@
 package ru.practicum.shareit.user.dao;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.practicum.shareit.user.User;
-
-import java.util.Collection;
 
 /**
  * Интерфейс репозитория пользователей
  */
-public interface UserDAO {
-    User createUser(User user);
+public interface UserDAO extends JpaRepository<User, Integer> {
 
-    User getUserById(Integer userId);
-
-    Collection<User> getAllUsers();
-
-    User update(Integer userId, User user);
-
-    void delete(Integer userId);
 }

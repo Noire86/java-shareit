@@ -1,20 +1,16 @@
 package ru.practicum.shareit.item.dao;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.practicum.shareit.item.model.Item;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Интерфейс для репозитория Item-ов
  */
-public interface ItemDAO {
-    Item addItem(Integer ownerId, Item item);
+public interface ItemDAO extends JpaRepository<Item, Integer> {
 
-    Item amendItem(Integer itemId, Item item);
+    List<Item> findByOwnerEquals(Integer ownerId);
 
-    Item getItem(Integer itemId);
-
-    Collection<Item> getAllItemsByOwner(Integer ownerId);
-
-    Collection<Item> search(String searchQuery);
+    List<Item> findAllByNameOrDescriptionContainingIgnoreCaseAndAvailableIsTrue(String name, String desc);
 }

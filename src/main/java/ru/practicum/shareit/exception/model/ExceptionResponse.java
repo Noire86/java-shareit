@@ -12,5 +12,5 @@ public class ExceptionResponse {
     private String statusCode;
     private String timestamp;
     private String exceptionType;
-    private String message;
+    private String error;
 }

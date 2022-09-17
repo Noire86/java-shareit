@@ -1,22 +1,18 @@
-package ru.practicum.shareit.user.dto;
+package ru.practicum.shareit.booking.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
-
 /**
- * ДТО-модель пользователя
+ * DTO для отображения бронирования в объекте вещи
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class UserDto {
+public class BookingItemDto {
     private Integer id;
-    private String name;
-    @Email
-    private String email;
+    private Integer bookerId;
 }

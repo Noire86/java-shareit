@@ -5,18 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * // DTO-модель для итема
- */
+import java.time.LocalDateTime;
 
+/**
+ * DTO для представления комментария в объекте вещи
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class ItemDto {
+public class CommentItemDto {
     private Integer id;
-    private String name;
-    private String description;
-    private Boolean available;
-    private Integer request;
+    private String text;
+    private String authorName;
+    private LocalDateTime created;
 }

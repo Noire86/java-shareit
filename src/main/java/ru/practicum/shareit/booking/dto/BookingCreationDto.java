@@ -4,24 +4,22 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.util.Status;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 /**
- * Основной DTO для бронирования
+ * DTO для создания бронирования
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class BookingDto {
-    private Integer id;
+public class BookingCreationDto {
+    @NotNull
+    private Integer itemId;
+    @NotNull
     private LocalDateTime start;
+    @NotNull
     private LocalDateTime end;
-    private User booker;
-    private Item item;
-    private Status status;
 }
