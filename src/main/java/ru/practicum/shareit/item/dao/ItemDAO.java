@@ -13,4 +13,6 @@ public interface ItemDAO extends JpaRepository<Item, Integer> {
     List<Item> findByOwnerEquals(Integer ownerId);
 
     List<Item> findAllByNameOrDescriptionContainingIgnoreCaseAndAvailableIsTrue(String name, String desc);
+
+    List<Item> findAllByRequest(Integer request);
 }

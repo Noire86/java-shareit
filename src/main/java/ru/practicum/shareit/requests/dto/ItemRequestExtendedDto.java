@@ -7,18 +7,16 @@ import lombok.NoArgsConstructor;
 import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-/**
- * // Ожидает реализации
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class ItemRequestDto {
+public class ItemRequestExtendedDto {
     private Integer id;
     private String description;
     private Integer requestorId;
     private LocalDateTime created;
+    private List<ItemResponseDto> items;
 }
-
