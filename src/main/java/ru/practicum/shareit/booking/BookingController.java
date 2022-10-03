@@ -37,20 +37,24 @@ public class BookingController {
         return new ResponseEntity<>(bookingService.findBookingById(userId, bookingId), HttpStatus.OK);
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<BookingDto>> getRequestorBookings(
             @RequestHeader("X-Sharer-User-Id") Integer userId,
-            @RequestParam(defaultValue = "ALL") String state) {
+            @RequestParam(defaultValue = "ALL") String state,
+            @RequestParam(required = false) Integer from,
+            @RequestParam(required = false) Integer size) {
 
-        return new ResponseEntity<>(bookingService.getRequestorBookings(userId, state), HttpStatus.OK);
+        return new ResponseEntity<>(bookingService.getRequestorBookings(userId, state, from, size), HttpStatus.OK);
     }
 
     @GetMapping("/owner")
     public ResponseEntity<List<BookingDto>> getOwnerBookings(
             @RequestHeader("X-Sharer-User-Id") Integer userId,
-            @RequestParam(defaultValue = "ALL") String state) {
+            @RequestParam(defaultValue = "ALL") String state,
+            @RequestParam(required = false) Integer from,
+            @RequestParam(required = false) Integer size) {
 
-        return new ResponseEntity<>(bookingService.getOwnerBookings(userId, state), HttpStatus.OK);
+        return new ResponseEntity<>(bookingService.getOwnerBookings(userId, state, from, size), HttpStatus.OK);
     }
 
     @PatchMapping("/{bookingId}")

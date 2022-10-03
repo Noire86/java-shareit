@@ -18,11 +18,12 @@ public class PaginationUtils {
     }
 
     public static Pageable handlePaginationParams(Integer from, Integer size) {
+
         if (from == null && size == null) {
             return Pageable.unpaged();
         } else {
             PaginationUtils.verifyPaginationParams(from, size);
-            return PageRequest.of(from, size);
+            return PageRequest.of(from / size, size);
         }
     }
 }

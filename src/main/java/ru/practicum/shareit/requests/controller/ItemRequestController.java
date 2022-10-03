@@ -39,17 +39,19 @@ public class ItemRequestController {
 
     @GetMapping("/all")
     public ResponseEntity<List<ItemRequestExtendedDto>> getAllItemRequests(
+            @RequestHeader("X-Sharer-User-Id") Integer userId,
             @RequestParam(required = false) Integer from,
             @RequestParam(required = false) Integer size) {
 
-        return new ResponseEntity<>(service.getAllItemRequestsPaged(from, size), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllItemRequestsPaged(userId, from, size), HttpStatus.OK);
     }
 
     @GetMapping("/{requestId}")
     public ResponseEntity<ItemRequestExtendedDto> getItemRequestById(
+            @RequestHeader("X-Sharer-User-Id") Integer userId,
             @PathVariable Integer requestId) {
 
-        return new ResponseEntity<>(service.getItemRequestById(requestId), HttpStatus.OK);
+        return new ResponseEntity<>(service.getItemRequestById(userId, requestId), HttpStatus.OK);
     }
 
 }

@@ -1,6 +1,7 @@
 package ru.practicum.shareit.booking.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dao.BookingDAO;
@@ -14,6 +15,7 @@ import ru.practicum.shareit.item.dao.ItemDAO;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dao.UserDAO;
+import ru.practicum.shareit.util.PaginationUtils;
 import ru.practicum.shareit.util.State;
 import ru.practicum.shareit.util.Status;
 
@@ -89,30 +91,31 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDto> getRequestorBookings(Integer userId, String state) {
+    public List<BookingDto> getRequestorBookings(Integer userId, String state, Integer from, Integer size) {
         User booker = userDAO.findById(userId).orElseThrow(EntityNotFoundException::new);
+        Pageable pageable = PaginationUtils.handlePaginationParams(from, size);
         List<Booking> bookingList = new ArrayList<>();
 
         try {
             State stateEnum = State.valueOf(state);
             switch (stateEnum) {
                 case ALL:
-                    bookingList.addAll(bookingDAO.findBookerBookings(booker.getId()));
+                    bookingList.addAll(bookingDAO.findBookerBookings(booker.getId(), pageable));
                     break;
                 case PAST:
-                    bookingList.addAll(bookingDAO.findBookerBookingsFromPast(booker.getId(), LocalDateTime.now()));
+                    bookingList.addAll(bookingDAO.findBookerBookingsFromPast(booker.getId(), LocalDateTime.now(), pageable));
                     break;
                 case FUTURE:
-                    bookingList.addAll(bookingDAO.findBookerBookingsFromFuture(booker.getId(), LocalDateTime.now()));
+                    bookingList.addAll(bookingDAO.findBookerBookingsFromFuture(booker.getId(), LocalDateTime.now(), pageable));
                     break;
                 case CURRENT:
-                    bookingList.addAll(bookingDAO.findBookerCurrentBookings(booker.getId(), LocalDateTime.now()));
+                    bookingList.addAll(bookingDAO.findBookerCurrentBookings(booker.getId(), LocalDateTime.now(), pageable));
                     break;
                 case WAITING:
-                    bookingList.addAll(bookingDAO.findBookerBookingsByStatus(booker.getId(), Status.WAITING));
+                    bookingList.addAll(bookingDAO.findBookerBookingsByStatus(booker.getId(), Status.WAITING, pageable));
                     break;
                 case REJECTED:
-                    bookingList.addAll(bookingDAO.findBookerBookingsByStatus(booker.getId(), Status.REJECTED));
+                    bookingList.addAll(bookingDAO.findBookerBookingsByStatus(booker.getId(), Status.REJECTED, pageable));
                     break;
             }
         } catch (IllegalArgumentException ex) {
@@ -126,30 +129,31 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDto> getOwnerBookings(Integer userId, String state) {
+    public List<BookingDto> getOwnerBookings(Integer userId, String state, Integer from, Integer size) {
         User owner = userDAO.findById(userId).orElseThrow(EntityNotFoundException::new);
+        Pageable pageable = PaginationUtils.handlePaginationParams(from, size);
         List<Booking> bookingList = new ArrayList<>();
 
         try {
             State stateEnum = State.valueOf(state);
             switch (stateEnum) {
                 case ALL:
-                    bookingList.addAll(bookingDAO.findOwnerBookings(owner.getId()));
+                    bookingList.addAll(bookingDAO.findOwnerBookings(owner.getId(), pageable));
                     break;
                 case PAST:
-                    bookingList.addAll(bookingDAO.findOwnerBookingsFromPast(owner.getId(), LocalDateTime.now()));
+                    bookingList.addAll(bookingDAO.findOwnerBookingsFromPast(owner.getId(), LocalDateTime.now(), pageable));
                     break;
                 case FUTURE:
-                    bookingList.addAll(bookingDAO.findOwnerBookingsFromFuture(owner.getId(), LocalDateTime.now()));
+                    bookingList.addAll(bookingDAO.findOwnerBookingsFromFuture(owner.getId(), LocalDateTime.now(), pageable));
                     break;
                 case CURRENT:
-                    bookingList.addAll(bookingDAO.findOwnerCurrentBookings(owner.getId(), LocalDateTime.now()));
+                    bookingList.addAll(bookingDAO.findOwnerCurrentBookings(owner.getId(), LocalDateTime.now(), pageable));
                     break;
                 case WAITING:
-                    bookingList.addAll(bookingDAO.findOwnerBookingsByStatus(owner.getId(), Status.WAITING));
+                    bookingList.addAll(bookingDAO.findOwnerBookingsByStatus(owner.getId(), Status.WAITING, pageable));
                     break;
                 case REJECTED:
-                    bookingList.addAll(bookingDAO.findOwnerBookingsByStatus(owner.getId(), Status.REJECTED));
+                    bookingList.addAll(bookingDAO.findOwnerBookingsByStatus(owner.getId(), Status.REJECTED, pageable));
                     break;
             }
         } catch (IllegalArgumentException ex) {

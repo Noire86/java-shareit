@@ -48,13 +48,20 @@ public class ItemController {
     }
 
     @GetMapping
-    public ResponseEntity<Collection<ItemExtendedDto>> getAllItemsByOwner(@RequestHeader("X-Sharer-User-Id") Integer userId) {
-        return new ResponseEntity<>(itemService.getAllItemsByOwner(userId), HttpStatus.OK);
+    public ResponseEntity<Collection<ItemExtendedDto>> getAllItemsByOwner(
+            @RequestHeader("X-Sharer-User-Id") Integer userId,
+            @RequestParam(required = false) Integer from,
+            @RequestParam(required = false) Integer size) {
+        return new ResponseEntity<>(itemService.getAllItemsByOwner(userId, from, size), HttpStatus.OK);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Collection<ItemDto>> searchItem(@RequestParam(name = "text") String text) {
-        return new ResponseEntity<>(itemService.search(text), HttpStatus.OK);
+    public ResponseEntity<Collection<ItemDto>> searchItem(
+            @RequestParam(name = "text") String text,
+            @RequestParam(required = false) Integer from,
+            @RequestParam(required = false) Integer size) {
+
+        return new ResponseEntity<>(itemService.search(text, from, size), HttpStatus.OK);
     }
 
     @PostMapping("/{itemId}/comment")

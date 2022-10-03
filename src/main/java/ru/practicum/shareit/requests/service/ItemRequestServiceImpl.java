@@ -51,19 +51,20 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     @Override
-    public List<ItemRequestExtendedDto> getAllItemRequestsPaged(Integer from, Integer size) {
+    public List<ItemRequestExtendedDto> getAllItemRequestsPaged(Integer userId, Integer from, Integer size) {
         Pageable pageable = PaginationUtils.handlePaginationParams(from, size);
         List<ItemRequest> allRequests = itemRequestDAO.getAllItemRequests(pageable);
 
         return allRequests.stream()
+                .filter(ir -> !ir.getRequestor().getId().equals(userId))
                 .map(ir -> ItemRequestMapper.toItemRequestExtendedDto(ir, itemDAO.findAllByRequest(ir.getId())))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public ItemRequestExtendedDto getItemRequestById(Integer requestId) {
+    public ItemRequestExtendedDto getItemRequestById(Integer userId, Integer requestId) {
+        userDAO.findById(userId).orElseThrow(EntityNotFoundException::new);
         ItemRequest result = itemRequestDAO.findById(requestId).orElseThrow(EntityNotFoundException::new);
-
         return ItemRequestMapper.toItemRequestExtendedDto(result, itemDAO.findAllByRequest(result.getId()));
     }
 }

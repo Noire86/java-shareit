@@ -11,6 +11,6 @@ public interface ItemRequestService {
 
     ItemRequestDto createRequest(Integer userId, ItemRequestCreationDto itemRequestCreationDto);
     List<ItemRequestExtendedDto> getPersonalItemRequests(Integer userId);
-    List<ItemRequestExtendedDto> getAllItemRequestsPaged(Integer from, Integer size);
-    ItemRequestExtendedDto getItemRequestById(Integer requestId);
+    List<ItemRequestExtendedDto> getAllItemRequestsPaged(Integer userId, Integer from, Integer size);
+    ItemRequestExtendedDto getItemRequestById(Integer userId, Integer requestId);
 }
