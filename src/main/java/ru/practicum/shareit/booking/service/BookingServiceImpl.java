@@ -168,9 +168,9 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto approveRequest(Integer userId, Integer bookingId, Boolean isApproved) {
-        Booking booking = bookingDAO.getReferenceById(bookingId);
-        Item item = itemDAO.getReferenceById(booking.getItem().getId());
-        User user = userDAO.getReferenceById(userId);
+        Booking booking = bookingDAO.findById(bookingId).orElseThrow(EntityNotFoundException::new);
+        Item item = itemDAO.findById(booking.getItem().getId()).orElseThrow(EntityNotFoundException::new);
+        User user = userDAO.findById(userId).orElseThrow(EntityNotFoundException::new);
 
         if (!user.getId().equals(item.getOwner())) {
             throw new ValidationException(
