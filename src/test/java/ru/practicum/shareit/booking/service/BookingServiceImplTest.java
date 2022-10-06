@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import ru.practicum.shareit.booking.BaseTest;
 import ru.practicum.shareit.booking.dao.BookingDAO;
 import ru.practicum.shareit.booking.dto.BookingCreationDto;
 import ru.practicum.shareit.booking.dto.BookingDto;
@@ -14,8 +15,6 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.exception.AccessViolationException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dao.ItemDAO;
-import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dao.UserDAO;
 import ru.practicum.shareit.util.PaginationUtils;
 import ru.practicum.shareit.util.Status;
@@ -27,11 +26,12 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-class BookingServiceImplTest {
+class BookingServiceImplTest extends BaseTest {
 
     @MockBean
     private BookingDAO bookingDAO;
@@ -45,69 +45,45 @@ class BookingServiceImplTest {
     @Autowired
     private BookingService bookingService;
 
-    private User user;
-    private User booker;
-    private User dummy;
-    private Item item;
-    private Item item2;
-    private Item unavailable;
-    private Booking booking;
-    private Booking booking2;
+    @BeforeEach
+    private void setupEntities() {
+        user = prepareDetachedUser();
+        user.setId(1);
+
+        booker = prepareDetachedUser();
+        booker.setId(2);
+
+        dummy = prepareDetachedUser();
+        dummy.setId(3);
+
+        item = prepareDetachedItem(user, true);
+        item.setId(1);
+
+        item2 = prepareDetachedItem(user, true);
+        item2.setId(3);
+
+        unavailable = prepareDetachedItem(user, false);
+        unavailable.setId(2);
+
+        booking = prepareDetachedBooking(
+                LocalDateTime.now().plusDays(1),
+                LocalDateTime.now().plusDays(5),
+                booker,
+                item,
+                Status.WAITING);
+        booking.setId(1);
+
+        booking2 = prepareDetachedBooking(
+                LocalDateTime.now().minusDays(1),
+                LocalDateTime.now().plusDays(5),
+                booker,
+                item2,
+                Status.REJECTED);
+        booking2.setId(2);
+    }
 
     @BeforeEach
-    private void setupMocks() {
-        user = new User();
-        user.setId(1);
-        user.setName("User");
-        user.setEmail("test@test");
-
-        booker = new User();
-        booker.setId(2);
-        booker.setName("User");
-        booker.setEmail("test@test");
-
-        dummy = new User();
-        dummy.setId(3);
-        dummy.setName("dummy");
-        dummy.setEmail("dummy@email.com");
-
-        item = new Item();
-        item.setId(1);
-        item.setOwner(1);
-        item.setName("TestItem");
-        item.setDescription("TestDesc");
-        item.setAvailable(true);
-
-        item2 = new Item();
-        item2.setId(2);
-        item2.setOwner(1);
-        item2.setName("TestItem2");
-        item2.setDescription("TestDesc");
-        item2.setAvailable(true);
-
-        unavailable = new Item();
-        unavailable.setId(2);
-        unavailable.setOwner(1);
-        unavailable.setName("UnavailableItem");
-        unavailable.setDescription("TestDesc");
-        unavailable.setAvailable(false);
-
-        booking = new Booking();
-        booking.setId(1);
-        booking.setStart(LocalDateTime.now().plusDays(1));
-        booking.setEnd(LocalDateTime.now().plusDays(5));
-        booking.setBooker(booker);
-        booking.setItem(item);
-        booking.setStatus(Status.WAITING);
-
-        booking2 = new Booking();
-        booking2.setId(2);
-        booking2.setStart(LocalDateTime.now().plusDays(1));
-        booking2.setEnd(LocalDateTime.now().plusDays(5));
-        booking2.setBooker(booker);
-        booking2.setItem(item2);
-        booking2.setStatus(Status.REJECTED);
-
+    void setupMocks() {
         when(userDAO.findById(1))
                 .thenReturn(Optional.of(user));
 
