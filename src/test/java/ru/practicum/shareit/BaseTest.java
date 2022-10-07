@@ -1,4 +1,4 @@
-package ru.practicum.shareit.booking;
+package ru.practicum.shareit;
 
 import com.github.javafaker.Faker;
 import ru.practicum.shareit.booking.model.Booking;
@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 
 public abstract class BaseTest {
     protected User user;
+    protected User user2;
+    protected User user3;
     protected User booker;
     protected User dummy;
     protected Item item;
