@@ -67,6 +67,7 @@ class UserServiceImplTest extends BaseTest {
     void updateValidUser() {
         UserDto updated = UserDto.builder()
                 .name("Updated User")
+                .email("NewEmail@goog.com")
                 .build();
 
         when(userDAO.findById(anyInt()))
@@ -118,5 +119,10 @@ class UserServiceImplTest extends BaseTest {
         ValidationException ex = assertThrows(ValidationException.class,
                 () -> service.createUser(UserMapper.toUserDto(user)));
         assertEquals(ex.getMessage(), "User email cannot be empty or null");
+    }
+
+    @Test
+    void deleteUser() {
+        service.deleteUser(1);
     }
 }
