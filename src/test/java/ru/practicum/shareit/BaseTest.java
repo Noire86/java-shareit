@@ -22,7 +22,7 @@ public abstract class BaseTest {
     protected Booking futureBooking;
     protected Booking pastBooking;
 
-    private final Faker faker;
+    public final Faker faker;
 
     public BaseTest() {
         this.faker = new Faker();
