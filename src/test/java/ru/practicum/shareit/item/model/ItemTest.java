@@ -1,11 +1,10 @@
 package ru.practicum.shareit.item.model;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.practicum.shareit.BaseTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ItemTest extends BaseTest {
 
