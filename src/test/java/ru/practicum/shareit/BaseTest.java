@@ -2,6 +2,7 @@ package ru.practicum.shareit;
 
 import com.github.javafaker.Faker;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.util.Status;
@@ -15,6 +16,7 @@ public abstract class BaseTest {
     protected User booker;
     protected User dummy;
     protected Item item;
+    protected Item item1;
     protected Item item2;
     protected Item unavailable;
     protected Booking booking;
@@ -55,5 +57,15 @@ public abstract class BaseTest {
         booking.setStatus(status);
 
         return booking;
+    }
+
+    protected Comment prepareDetachedComment(Item item, User author) {
+        Comment comment = new Comment();
+        comment.setItem(item);
+        comment.setAuthor(author);
+        comment.setText(faker.letterify("#################"));
+        comment.setCreated(LocalDateTime.now());
+
+        return comment;
     }
 }

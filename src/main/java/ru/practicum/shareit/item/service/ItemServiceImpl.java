@@ -50,10 +50,10 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto amendItem(Integer ownerId, Integer itemId, ItemDto item) {
-        Item result = itemDAO.getReferenceById(itemId);
+        Item result = itemDAO.findById(itemId).orElseThrow(EntityNotFoundException::new);
         result.setId(itemId);
 
-        if (!itemDAO.getReferenceById(itemId).getOwner().equals(ownerId)) {
+        if (!itemDAO.findById(itemId).orElseThrow(EntityNotFoundException::new).getOwner().equals(ownerId)) {
             throw new AccessViolationException("This user does not have access to this Item!", HttpStatus.FORBIDDEN);
         }
 

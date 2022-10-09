@@ -5,6 +5,8 @@ import ru.practicum.shareit.item.dto.ItemExtendedDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.requests.dto.ItemResponseDto;
 
+import java.util.Collections;
+
 /**
  * Маппер-класс для итемов
  */
@@ -38,6 +40,7 @@ public class ItemMapper {
                 .description(item.getDescription())
                 .available(item.getAvailable())
                 .request(item.getRequest())
+                .comments(Collections.emptyList())
                 .build();
     }
 
