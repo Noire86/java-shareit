@@ -201,6 +201,7 @@ class ItemServiceImplTest extends BaseTest {
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(true)
+                .request(item.getRequest())
                 .lastBooking(BookingMapper.toBookingItemInfoDto(pastBooking))
                 .nextBooking(BookingMapper.toBookingItemInfoDto(futureBooking))
                 .build();
@@ -292,5 +293,70 @@ class ItemServiceImplTest extends BaseTest {
         assertEquals(dto.getText(), result.getText());
         assertEquals(result.getItem(), item);
         assertEquals(result.getAuthorName(), user.getName());
+    }
+
+    @Test
+    void addNewCommentWithInvalidCommenter() {
+        CommentCreationDto dto = CommentCreationDto.builder()
+                .text("test")
+                .build();
+
+        user.setId(1);
+        when(userDAO.findById(1))
+                .thenReturn(Optional.of(user));
+
+        when(itemDAO.findById(1))
+                .thenReturn(Optional.of(item));
+
+        when(bookingDAO.findValidUserBookingsByItem(1, 1))
+                .thenReturn(Collections.emptyList());
+
+        AccessViolationException ex = assertThrows(AccessViolationException.class,
+                () -> service.addNewComment(1, 1, dto));
+        assertEquals(ex.getMessage(), "This user cannot leave a comment, because he has never booked this item");
+    }
+
+    @Test
+    void addNewCommentWithUnavailableItem() {
+        CommentCreationDto dto = CommentCreationDto.builder()
+                .text("test")
+                .build();
+
+        user.setId(1);
+        item.setAvailable(false);
+
+        when(userDAO.findById(1))
+                .thenReturn(Optional.of(user));
+
+        when(itemDAO.findById(1))
+                .thenReturn(Optional.of(item));
+
+        when(bookingDAO.findValidUserBookingsByItem(1, 1))
+                .thenReturn(List.of(booking));
+
+        ValidationException ex = assertThrows(ValidationException.class,
+                () -> service.addNewComment(1, 1, dto));
+        assertEquals(ex.getMessage(), "You cannot leave comment for unavailable item booking");
+    }
+
+    @Test
+    void addNewCommentWithEmptyText() {
+        CommentCreationDto dto = CommentCreationDto.builder()
+                .text("")
+                .build();
+
+        user.setId(1);
+        when(userDAO.findById(1))
+                .thenReturn(Optional.of(user));
+
+        when(itemDAO.findById(1))
+                .thenReturn(Optional.of(item));
+
+        when(bookingDAO.findValidUserBookingsByItem(1, 1))
+                .thenReturn(List.of(booking));
+
+        ValidationException ex = assertThrows(ValidationException.class,
+                () -> service.addNewComment(1, 1, dto));
+        assertEquals(ex.getMessage(), "Empty comment text!");
     }
 }

@@ -4,6 +4,7 @@ import com.github.javafaker.Faker;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.requests.model.ItemRequest;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.util.Status;
 
@@ -23,6 +24,11 @@ public abstract class BaseTest {
     protected Booking booking2;
     protected Booking futureBooking;
     protected Booking pastBooking;
+    protected Comment comment1;
+    protected Comment comment2;
+    protected ItemRequest itemRequest1;
+    protected ItemRequest itemRequest2;
+    protected ItemRequest itemRequest3;
 
     public final Faker faker;
 
@@ -44,6 +50,7 @@ public abstract class BaseTest {
         item.setName(faker.funnyName().name());
         item.setDescription(faker.beer().name() + faker.beer().name());
         item.setAvailable(available);
+        item.setRequest(faker.number().randomDigit());
 
         return item;
     }
@@ -63,9 +70,18 @@ public abstract class BaseTest {
         Comment comment = new Comment();
         comment.setItem(item);
         comment.setAuthor(author);
-        comment.setText(faker.letterify("#################"));
+        comment.setText(faker.book().title());
         comment.setCreated(LocalDateTime.now());
 
         return comment;
+    }
+
+    protected ItemRequest prepareDetachedItemRequest(User requestor) {
+        ItemRequest ir = new ItemRequest();
+        ir.setRequestor(requestor);
+        ir.setCreated(LocalDateTime.now());
+        ir.setDescription(faker.medical().medicineName());
+
+        return ir;
     }
 }

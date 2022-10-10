@@ -24,7 +24,6 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({
             ValidationException.class,
-            StorageException.class,
             AccessViolationException.class
     })
     public ResponseEntity<ExceptionResponse> handleCommonException(CommonException ex) {
