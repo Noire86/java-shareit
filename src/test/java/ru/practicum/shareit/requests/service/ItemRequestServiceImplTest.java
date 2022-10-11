@@ -80,8 +80,8 @@ class ItemRequestServiceImplTest extends BaseTest {
                 .build();
 
         ItemRequestDto result = service.createRequest(user.getId(), creationDto);
-        assertEquals(result.getRequestorId(), user.getId());
-        assertEquals(result.getDescription(), "Test");
+        assertEquals(user.getId(), result.getRequestorId());
+        assertEquals("Test", result.getDescription());
     }
 
     @Test
@@ -104,7 +104,7 @@ class ItemRequestServiceImplTest extends BaseTest {
         );
 
         List<ItemRequestExtendedDto> result = service.getPersonalItemRequests(user.getId());
-        assertEquals(result, dto);
+        assertEquals(dto, result);
     }
 
     @Test
@@ -118,7 +118,7 @@ class ItemRequestServiceImplTest extends BaseTest {
                 .thenReturn(List.of(itemRequest1, itemRequest2, itemRequest3));
 
         List<ItemRequestExtendedDto> result = service.getAllItemRequestsPaged(user.getId(), 0, 10);
-        assertEquals(result.size(), 1);
+        assertEquals(1, result.size());
         assertTrue(result.contains(ItemRequestMapper.toItemRequestExtendedDto(itemRequest3, List.of(item))));
     }
 
@@ -133,6 +133,6 @@ class ItemRequestServiceImplTest extends BaseTest {
                 .thenReturn(Optional.of(itemRequest1));
 
         ItemRequestExtendedDto result = service.getItemRequestById(user.getId(), itemRequest1.getId());
-        assertEquals(result, ItemRequestMapper.toItemRequestExtendedDto(itemRequest1, List.of(item)));
+        assertEquals(ItemRequestMapper.toItemRequestExtendedDto(itemRequest1, List.of(item)), result);
     }
 }

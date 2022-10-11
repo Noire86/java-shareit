@@ -67,7 +67,7 @@ public class BookingDAOTest extends BaseTest {
     @Test
     void findOwnerBookings() {
         List<Booking> bookings = bookingDAO.findOwnerBookings(user.getId(), Pageable.unpaged());
-        assertEquals(bookings.size(), 4);
+        assertEquals(4, bookings.size());
         assertTrue(bookings.contains(booking));
         assertTrue(bookings.contains(booking2));
         assertTrue(bookings.contains(pastBooking));
@@ -77,11 +77,11 @@ public class BookingDAOTest extends BaseTest {
     @Test
     void findOwnerBookingsByStatus() {
         List<Booking> waiting = bookingDAO.findOwnerBookingsByStatus(user.getId(), Status.WAITING, Pageable.unpaged());
-        assertEquals(waiting.size(), 1);
+        assertEquals(1, waiting.size());
         assertTrue(waiting.contains(booking));
 
         List<Booking> rejected = bookingDAO.findOwnerBookingsByStatus(user.getId(), Status.REJECTED, Pageable.unpaged());
-        assertEquals(rejected.size(), 1);
+        assertEquals(1, rejected.size());
         assertTrue(rejected.contains(booking2));
 
     }
@@ -89,14 +89,14 @@ public class BookingDAOTest extends BaseTest {
     @Test
     void findOwnerBookingsFromPast() {
         List<Booking> past = bookingDAO.findOwnerBookingsFromPast(user.getId(), LocalDateTime.now(), Pageable.unpaged());
-        assertEquals(past.size(), 1);
+        assertEquals(1, past.size());
         assertTrue(past.contains(pastBooking));
     }
 
     @Test
     void findOwnerBookingsFromFuture() {
         List<Booking> future = bookingDAO.findOwnerBookingsFromFuture(user.getId(), LocalDateTime.now(), Pageable.unpaged());
-        assertEquals(future.size(), 2);
+        assertEquals(2, future.size());
         assertTrue(future.contains(booking));
         assertTrue(future.contains(futureBooking));
     }
@@ -104,14 +104,13 @@ public class BookingDAOTest extends BaseTest {
     @Test
     void findOwnerCurrentBookings() {
         List<Booking> current = bookingDAO.findOwnerCurrentBookings(user.getId(), LocalDateTime.now(), Pageable.unpaged());
-        assertEquals(current.size(), 1);
         assertTrue(current.contains(booking2));
     }
 
     @Test
     void findBookerBookings() {
         List<Booking> bookings = bookingDAO.findBookerBookings(booker.getId(), Pageable.unpaged());
-        assertEquals(bookings.size(), 4);
+        assertEquals(4, bookings.size());
         assertTrue(bookings.contains(booking));
         assertTrue(bookings.contains(booking2));
         assertTrue(bookings.contains(pastBooking));
@@ -121,7 +120,7 @@ public class BookingDAOTest extends BaseTest {
     @Test
     void findBookerBookingsByStatus() {
         List<Booking> waiting = bookingDAO.findBookerBookingsByStatus(booker.getId(), Status.WAITING, Pageable.unpaged());
-        assertEquals(waiting.size(), 1);
+        assertEquals(1, waiting.size());
         assertTrue(waiting.contains(booking));
 
         List<Booking> rejected = bookingDAO.findBookerBookingsByStatus(booker.getId(), Status.REJECTED, Pageable.unpaged());
@@ -132,14 +131,14 @@ public class BookingDAOTest extends BaseTest {
     @Test
     void findBookerBookingsFromPast() {
         List<Booking> past = bookingDAO.findBookerBookingsFromPast(booker.getId(), LocalDateTime.now(), Pageable.unpaged());
-        assertEquals(past.size(), 1);
+        assertEquals(1, past.size());
         assertTrue(past.contains(pastBooking));
     }
 
     @Test
     void findBookerBookingsFromFuture() {
         List<Booking> future = bookingDAO.findBookerBookingsFromFuture(booker.getId(), LocalDateTime.now(), Pageable.unpaged());
-        assertEquals(future.size(), 2);
+        assertEquals(2, future.size());
         assertTrue(future.contains(booking));
         assertTrue(future.contains(futureBooking));
     }
@@ -147,28 +146,28 @@ public class BookingDAOTest extends BaseTest {
     @Test
     void findBookerCurrentBookings() {
         List<Booking> current = bookingDAO.findBookerCurrentBookings(booker.getId(), LocalDateTime.now(), Pageable.unpaged());
-        assertEquals(current.size(), 1);
+        assertEquals(1, current.size());
         assertTrue(current.contains(booking2));
     }
 
     @Test
     void findValidUserBookingsByItem() {
         List<Booking> valid = bookingDAO.findValidUserBookingsByItem(booker.getId(), item.getId());
-        assertEquals(valid.size(), 1);
+        assertEquals(1, valid.size());
         assertTrue(valid.contains(pastBooking));
     }
 
     @Test
     void getNextBooking() {
         List<Booking> nextBooking = bookingDAO.getNextBooking(item.getId());
-        assertEquals(nextBooking.size(), 1);
+        assertEquals(1, nextBooking.size());
         assertTrue(nextBooking.contains(futureBooking));
     }
 
     @Test
     void getLastBooking() {
         List<Booking> lastBooking = bookingDAO.getLastBooking(item.getId());
-        assertEquals(lastBooking.size(), 1);
+        assertEquals(1, lastBooking.size());
         assertTrue(lastBooking.contains(pastBooking));
     }
 }

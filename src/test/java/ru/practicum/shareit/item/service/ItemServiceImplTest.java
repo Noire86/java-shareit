@@ -106,9 +106,9 @@ class ItemServiceImplTest extends BaseTest {
         ItemDto result = service.addItem(user.getId(), itemDto);
 
         assertNotNull(result);
-        assertEquals(result.getName(), itemDto.getName());
-        assertEquals(result.getDescription(), itemDto.getDescription());
-        assertEquals(result.getAvailable(), itemDto.getAvailable());
+        assertEquals(itemDto.getName(), result.getName());
+        assertEquals(itemDto.getDescription(), result.getDescription());
+        assertEquals(itemDto.getAvailable(), result.getAvailable());
     }
 
     @Test
@@ -121,7 +121,7 @@ class ItemServiceImplTest extends BaseTest {
 
         ValidationException ex = assertThrows(ValidationException.class,
                 () -> service.addItem(user.getId(), itemDto));
-        assertEquals(ex.getMessage(), "Item name cannot be empty");
+        assertEquals("Item name cannot be empty", ex.getMessage());
     }
 
     @Test
@@ -134,7 +134,7 @@ class ItemServiceImplTest extends BaseTest {
 
         ValidationException ex = assertThrows(ValidationException.class,
                 () -> service.addItem(user.getId(), itemDto));
-        assertEquals(ex.getMessage(), "Item description cannot be empty");
+        assertEquals("Item description cannot be empty", ex.getMessage());
     }
 
     @Test
@@ -147,7 +147,7 @@ class ItemServiceImplTest extends BaseTest {
 
         ValidationException ex = assertThrows(ValidationException.class,
                 () -> service.addItem(user.getId(), itemDto));
-        assertEquals(ex.getMessage(), "Item availability cannot be empty");
+        assertEquals("Item availability cannot be empty", ex.getMessage());
     }
 
 
@@ -168,10 +168,10 @@ class ItemServiceImplTest extends BaseTest {
         ItemDto result = service.amendItem(1, 1, itemDto);
 
         assertNotNull(result);
-        assertEquals(result.getId(), 1);
-        assertEquals(result.getName(), itemDto.getName());
-        assertEquals(result.getDescription(), itemDto.getDescription());
-        assertEquals(result.getAvailable(), itemDto.getAvailable());
+        assertEquals(1, result.getId());
+        assertEquals(itemDto.getName(), result.getName());
+        assertEquals(itemDto.getDescription(), result.getDescription());
+        assertEquals(itemDto.getAvailable(), result.getAvailable());
     }
 
     @Test
@@ -188,7 +188,7 @@ class ItemServiceImplTest extends BaseTest {
         AccessViolationException ex = assertThrows(AccessViolationException.class,
                 () -> service.amendItem(2, 1, itemDto));
 
-        assertEquals(ex.getMessage(), "This user does not have access to this Item!");
+        assertEquals("This user does not have access to this Item!", ex.getMessage());
     }
 
     @Test
@@ -221,7 +221,7 @@ class ItemServiceImplTest extends BaseTest {
 
         ItemExtendedDto result = service.getItem(1, 1);
 
-        assertEquals(result, dto);
+        assertEquals(dto, result);
     }
 
     @Test
@@ -248,7 +248,7 @@ class ItemServiceImplTest extends BaseTest {
                 .thenReturn(Collections.emptyList());
 
         Collection<ItemExtendedDto> result = service.getAllItemsByOwner(user.getId(), 0, 10);
-        assertEquals(result.size(), 2);
+        assertEquals(2, result.size());
         assertTrue(result.contains(ItemMapper.toItemExtendedDto(item)));
         assertTrue(result.contains(ItemMapper.toItemExtendedDto(item1)));
     }
@@ -256,7 +256,7 @@ class ItemServiceImplTest extends BaseTest {
     @Test
     void search() {
         Collection<ItemDto> emptyResult = service.search("", 0, 2);
-        assertEquals(emptyResult.size(), 0);
+        assertEquals(0, emptyResult.size());
 
         item.setName("test");
 
@@ -265,8 +265,8 @@ class ItemServiceImplTest extends BaseTest {
                 .thenReturn(List.of(item));
 
         Collection<ItemDto> result = service.search("test", 0, 2);
-        assertEquals(result.size(), 1);
-        assertEquals(result, List.of(ItemMapper.toItemDto(item)));
+        assertEquals(1, result.size());
+        assertEquals(List.of(ItemMapper.toItemDto(item)), result);
     }
 
     @Test
@@ -290,9 +290,9 @@ class ItemServiceImplTest extends BaseTest {
 
         CommentDto result = service.addNewComment(1, 1, dto);
 
-        assertEquals(dto.getText(), result.getText());
-        assertEquals(result.getItem(), item);
-        assertEquals(result.getAuthorName(), user.getName());
+        assertEquals(result.getText(), dto.getText());
+        assertEquals(item, result.getItem());
+        assertEquals(user.getName(), result.getAuthorName());
     }
 
     @Test
@@ -313,7 +313,7 @@ class ItemServiceImplTest extends BaseTest {
 
         AccessViolationException ex = assertThrows(AccessViolationException.class,
                 () -> service.addNewComment(1, 1, dto));
-        assertEquals(ex.getMessage(), "This user cannot leave a comment, because he has never booked this item");
+        assertEquals("This user cannot leave a comment, because he has never booked this item", ex.getMessage());
     }
 
     @Test
@@ -336,7 +336,7 @@ class ItemServiceImplTest extends BaseTest {
 
         ValidationException ex = assertThrows(ValidationException.class,
                 () -> service.addNewComment(1, 1, dto));
-        assertEquals(ex.getMessage(), "You cannot leave comment for unavailable item booking");
+        assertEquals("You cannot leave comment for unavailable item booking", ex.getMessage());
     }
 
     @Test
@@ -357,6 +357,6 @@ class ItemServiceImplTest extends BaseTest {
 
         ValidationException ex = assertThrows(ValidationException.class,
                 () -> service.addNewComment(1, 1, dto));
-        assertEquals(ex.getMessage(), "Empty comment text!");
+        assertEquals("Empty comment text!", ex.getMessage());
     }
 }

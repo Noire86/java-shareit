@@ -182,7 +182,7 @@ public class BookingServiceImpl implements BookingService {
             throw new ValidationException("This booking is already marked as APPROVED!", HttpStatus.BAD_REQUEST);
         }
 
-        booking.setStatus(isApproved ? Status.APPROVED : Status.REJECTED);
+        booking.setStatus(Boolean.TRUE.equals(isApproved) ? Status.APPROVED : Status.REJECTED);
         bookingDAO.save(booking);
         return BookingMapper.toBookingDto(booking);
     }

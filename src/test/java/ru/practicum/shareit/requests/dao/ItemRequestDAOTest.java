@@ -38,7 +38,7 @@ class ItemRequestDAOTest extends BaseTest {
     void getItemRequestsByRequestor() {
         List<ItemRequest> result = itemRequestDAO.getItemRequestsByRequestor(user.getId());
 
-        assertEquals(result.size(), 2);
+        assertEquals(2, result.size());
         assertTrue(result.contains(itemRequest1));
         assertTrue(result.contains(itemRequest2));
         assertFalse(result.contains(itemRequest3));
@@ -48,7 +48,7 @@ class ItemRequestDAOTest extends BaseTest {
     void getAllItemRequests() {
         List<ItemRequest> result = itemRequestDAO.getAllItemRequests(Pageable.unpaged());
 
-        assertEquals(result.size(), 3);
+        assertEquals(3, result.size());
         assertTrue(result.contains(itemRequest1));
         assertTrue(result.contains(itemRequest2));
         assertTrue(result.contains(itemRequest3));

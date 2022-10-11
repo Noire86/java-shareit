@@ -46,7 +46,7 @@ class UserServiceImplTest extends BaseTest {
     void getUsers() {
         Collection<UserDto> users = service.getUsers();
 
-        assertEquals(users.size(), 3);
+        assertEquals(3, users.size());
         assertTrue(users.contains(UserMapper.toUserDto(user)));
         assertTrue(users.contains(UserMapper.toUserDto(user2)));
         assertTrue(users.contains(UserMapper.toUserDto(user3)));
@@ -59,7 +59,7 @@ class UserServiceImplTest extends BaseTest {
                 .thenReturn(Optional.of(user));
 
         UserDto userDto = service.getUser(1);
-        assertEquals(userDto, UserMapper.toUserDto(user));
+        assertEquals(UserMapper.toUserDto(user), userDto);
     }
 
     @Test
@@ -77,7 +77,7 @@ class UserServiceImplTest extends BaseTest {
 
         UserDto result = service.updateUser(1, updated);
 
-        assertEquals(result.getName(), updated.getName());
+        assertEquals(updated.getName(), result.getName());
     }
 
     @Test
@@ -95,7 +95,7 @@ class UserServiceImplTest extends BaseTest {
                 .thenReturn(user);
 
         ValidationException ex = assertThrows(ValidationException.class, () -> service.updateUser(1, updated));
-        assertEquals(ex.getMessage(), "User with email " + user3.getEmail() + " already exists!");
+        assertEquals("User with email " + user3.getEmail() + " already exists!", ex.getMessage());
     }
 
     @Test
@@ -117,7 +117,7 @@ class UserServiceImplTest extends BaseTest {
 
         ValidationException ex = assertThrows(ValidationException.class,
                 () -> service.createUser(UserMapper.toUserDto(user)));
-        assertEquals(ex.getMessage(), "User email cannot be empty or null");
+        assertEquals("User email cannot be empty or null", ex.getMessage());
     }
 
     @Test

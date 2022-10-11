@@ -52,7 +52,7 @@ class ItemDAOTest extends BaseTest {
         List<Item> result = itemDAO.findAllByNameOrDescriptionContainingIgnoreCaseAndAvailableIsTrue(
                 "test", "test", Pageable.unpaged());
 
-        assertEquals(result.size(), 2);
+        assertEquals(2, result.size());
         assertTrue(result.contains(item));
         assertTrue(result.contains(item1));
         assertFalse(result.contains(item2));
@@ -64,7 +64,7 @@ class ItemDAOTest extends BaseTest {
         item1.setRequest(1);
 
         List<Item> result = itemDAO.findAllByRequest(1);
-        assertEquals(result.size(), 2);
+        assertEquals(2, result.size());
         assertTrue(result.contains(item));
         assertTrue(result.contains(item1));
         assertFalse(result.contains(item2));

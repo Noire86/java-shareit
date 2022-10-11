@@ -35,7 +35,7 @@ class CommentDAOTest extends BaseTest {
     void getCommentsByItemId() {
         List<Comment> result = commentDAO.getCommentsByItemId(item.getId());
 
-        assertEquals(result.size(), 2);
+        assertEquals(2, result.size());
         assertTrue(result.contains(comment1));
         assertTrue(result.contains(comment2));
     }
