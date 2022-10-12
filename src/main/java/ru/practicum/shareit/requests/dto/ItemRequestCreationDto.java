@@ -4,20 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.shareit.requests.model.ItemRequest;
 
-import java.time.LocalDateTime;
+import javax.validation.constraints.NotNull;
 
 /**
- * // Ожидает реализации
+ * A DTO for the {@link ItemRequest} entity
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class ItemRequestDto {
-    private Integer id;
-    private String description;
-    private Integer requestorId;
-    private LocalDateTime created;
-}
 
+public class ItemRequestCreationDto {
+    @NotNull
+    private String description;
+}

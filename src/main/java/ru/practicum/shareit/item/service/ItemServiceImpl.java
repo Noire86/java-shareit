@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dao.BookingDAO;
@@ -17,6 +18,7 @@ import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dao.UserDAO;
+import ru.practicum.shareit.util.PaginationUtils;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
@@ -48,10 +50,10 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto amendItem(Integer ownerId, Integer itemId, ItemDto item) {
-        Item result = itemDAO.getReferenceById(itemId);
+        Item result = itemDAO.findById(itemId).orElseThrow(EntityNotFoundException::new);
         result.setId(itemId);
 
-        if (!itemDAO.getReferenceById(itemId).getOwner().equals(ownerId)) {
+        if (!itemDAO.findById(itemId).orElseThrow(EntityNotFoundException::new).getOwner().equals(ownerId)) {
             throw new AccessViolationException("This user does not have access to this Item!", HttpStatus.FORBIDDEN);
         }
 
@@ -95,17 +97,21 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Collection<ItemExtendedDto> getAllItemsByOwner(Integer ownerId) {
-        return itemDAO.findByOwnerEquals(ownerId)
+    public Collection<ItemExtendedDto> getAllItemsByOwner(Integer ownerId, Integer from, Integer size) {
+        Pageable pageable = PaginationUtils.handlePaginationParams(from, size);
+
+        return itemDAO.findByOwnerEquals(ownerId, pageable)
                 .stream()
                 .map(i -> getItem(ownerId, i.getId()))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Collection<ItemDto> search(String searchQuery) {
+    public Collection<ItemDto> search(String searchQuery, Integer from, Integer size) {
+        Pageable pageable = PaginationUtils.handlePaginationParams(from, size);
+
         if (searchQuery.isEmpty()) return new ArrayList<>();
-        return itemDAO.findAllByNameOrDescriptionContainingIgnoreCaseAndAvailableIsTrue(searchQuery, searchQuery)
+        return itemDAO.findAllByNameOrDescriptionContainingIgnoreCaseAndAvailableIsTrue(searchQuery, searchQuery, pageable)
                 .stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());

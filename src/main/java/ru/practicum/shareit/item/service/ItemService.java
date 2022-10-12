@@ -18,9 +18,9 @@ public interface ItemService {
 
     ItemExtendedDto getItem(Integer userId, Integer itemId);
 
-    Collection<ItemExtendedDto> getAllItemsByOwner(Integer ownerId);
+    Collection<ItemExtendedDto> getAllItemsByOwner(Integer ownerId, Integer from, Integer size);
 
-    Collection<ItemDto> search(String searchQuery);
+    Collection<ItemDto> search(String searchQuery, Integer from, Integer size);
 
     CommentDto addNewComment(Integer commenterId, Integer itemId, CommentCreationDto commentCreationDto);
 }

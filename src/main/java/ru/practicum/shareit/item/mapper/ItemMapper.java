@@ -3,6 +3,9 @@ package ru.practicum.shareit.item.mapper;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemExtendedDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.requests.dto.ItemResponseDto;
+
+import java.util.Collections;
 
 /**
  * Маппер-класс для итемов
@@ -14,7 +17,7 @@ public class ItemMapper {
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getAvailable())
-                .request(item.getRequest())
+                .requestId(item.getRequest())
                 .build();
     }
 
@@ -24,7 +27,7 @@ public class ItemMapper {
         item.setName(itemDto.getName());
         item.setDescription(itemDto.getDescription());
         item.setAvailable(itemDto.getAvailable());
-        item.setRequest(itemDto.getRequest());
+        item.setRequest(itemDto.getRequestId());
         item.setOwner(ownerId);
 
         return item;
@@ -37,6 +40,17 @@ public class ItemMapper {
                 .description(item.getDescription())
                 .available(item.getAvailable())
                 .request(item.getRequest())
+                .comments(Collections.emptyList())
+                .build();
+    }
+
+    public static ItemResponseDto toItemResponseDto(Item item) {
+        return ItemResponseDto.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(item.getRequest())
                 .build();
     }
 }

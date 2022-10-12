@@ -9,6 +9,7 @@ import ru.practicum.shareit.user.dao.UserDAO;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -31,12 +32,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUser(Integer userId) {
-        return UserMapper.toUserDto(userDAO.getReferenceById(userId));
+        return UserMapper.toUserDto(
+                userDAO.findById(userId)
+                        .orElseThrow(EntityNotFoundException::new));
     }
 
     @Override
     public UserDto updateUser(Integer userId, UserDto userDto) {
-        User user = userDAO.getReferenceById(userId);
+        User user = userDAO.findById(userId)
+                .orElseThrow(EntityNotFoundException::new);
 
         if (userDto.getName() != null) {
             user.setName(userDto.getName());
