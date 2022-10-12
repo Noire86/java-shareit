@@ -240,14 +240,18 @@
 			<property name="severity" value="ignore"/>
 			<property name="checkHtml" value="false"/>
 			<metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
-		</module>
-		<module name="SummaryJavadoc">
-			<property name="severity" value="ignore"/>
-			<metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
-		</module>
-		<module name="SuppressWarningsHolder"/>
-		<module name="SuppressionCommentFilter"/>
-	</module>
-	<!--	<module name="NewlineAtEndOfFile"/>-->
-	<module name="SuppressWarningsFilter"/>
+        </module>
+        <module name="SummaryJavadoc">
+            <property name="severity" value="ignore"/>
+            <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+        </module>
+        <module name="SuppressWarningsHolder"/>
+        <module name="SuppressionCommentFilter"/>
+    </module>
+    <!--	<module name="NewlineAtEndOfFile"/>-->
+    <module name="SuppressWarningsFilter"/>
+    <module name="SuppressionFilter">
+        <property name="file" value="suppressions.xml"/>
+        <property name="optional" value="false"/>
+    </module>
 </module>
