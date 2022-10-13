@@ -9,6 +9,7 @@ import ru.practicum.shareit.exception.model.CommonException;
 import ru.practicum.shareit.exception.model.ExceptionResponse;
 import ru.practicum.shareit.exception.model.ValidationException;
 
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -21,7 +22,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
-    @ExceptionHandler(ValidationException.class)
+    @ExceptionHandler({ValidationException.class, ConstraintViolationException.class})
     public ResponseEntity<Object> handleCommonException(CommonException ex) {
         ExceptionResponse response = ExceptionResponse.builder()
                 .error(ex.getMessage())

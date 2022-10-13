@@ -1,18 +1,18 @@
-package ru.practicum.shareit.user.dto;
+package ru.practicum.shareit.requests.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * ДТО-модель пользователя
- */
+import javax.validation.constraints.NotEmpty;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class UserDto {
-    private String name;
-    private String email;
+
+public class ItemRequestCreationDto {
+    @NotEmpty
+    private String description;
 }
