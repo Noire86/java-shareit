@@ -51,6 +51,15 @@ public class BookingServiceImpl implements BookingService {
 
         if (item.getOwner().equals(booker.getId())) {
             throw new ValidationException("Cannot create booking as an item owner", HttpStatus.NOT_FOUND);
+
+        }
+
+        if (start.isBefore(LocalDateTime.now())) {
+            throw new ValidationException("Booking date error: starting date time is in the past", HttpStatus.BAD_REQUEST);
+        }
+
+        if (end.isBefore(LocalDateTime.now())) {
+            throw new ValidationException("Booking date error: ending date time is in the past", HttpStatus.BAD_REQUEST);
         }
 
         if (start.isAfter(end)) {
