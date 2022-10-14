@@ -27,6 +27,10 @@ public class BookingController {
             @RequestHeader("X-Sharer-User-Id") Integer userId,
             @Validated @RequestBody BookingCreationDto bookingCreationDto) {
 
+        if (bookingCreationDto.getStart().isAfter(bookingCreationDto.getEnd())) {
+            throw new ValidationException("Booking date error: starting date is after the ending time", HttpStatus.BAD_REQUEST);
+        }
+
         log.info("Creating booking {}, userId={}", bookingCreationDto, userId);
         return bookingClient.create(userId, bookingCreationDto);
     }

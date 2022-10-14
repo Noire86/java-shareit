@@ -54,19 +54,6 @@ public class BookingServiceImpl implements BookingService {
 
         }
 
-        if (start.isBefore(LocalDateTime.now())) {
-            throw new ValidationException("Booking date error: starting date time is in the past", HttpStatus.BAD_REQUEST);
-        }
-
-        if (end.isBefore(LocalDateTime.now())) {
-            throw new ValidationException("Booking date error: ending date time is in the past", HttpStatus.BAD_REQUEST);
-        }
-
-        if (start.isAfter(end)) {
-            throw new ValidationException("Booking date error: starting date is after the ending time", HttpStatus.BAD_REQUEST);
-        }
-
-
         booking.setStart(start);
         booking.setEnd(end);
         booking.setBooker(booker);
