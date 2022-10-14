@@ -98,7 +98,7 @@ public class ItemServiceImpl implements ItemService {
     public Collection<ItemExtendedDto> getAllItemsByOwner(Integer ownerId, Integer from, Integer size) {
         Pageable pageable = PaginationUtils.handlePaginationParams(from, size);
 
-        return itemDAO.findByOwnerEquals(ownerId, pageable)
+        cur return itemDAO.findByOwnerEqualsOrderByIdAsc(ownerId, pageable)
                 .stream()
                 .map(i -> getItem(ownerId, i.getId()))
                 .collect(Collectors.toList());

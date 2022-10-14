@@ -22,7 +22,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
-    @ExceptionHandler({ValidationException.class, ConstraintViolationException.class})
+    @ExceptionHandler({CommonException.class, ValidationException.class, ConstraintViolationException.class})
     public ResponseEntity<Object> handleCommonException(CommonException ex) {
         ExceptionResponse response = ExceptionResponse.builder()
                 .error(ex.getMessage())

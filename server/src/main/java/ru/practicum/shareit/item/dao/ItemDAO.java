@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface ItemDAO extends JpaRepository<Item, Integer> {
 
-    List<Item> findByOwnerEquals(Integer ownerId, Pageable pageable);
+    List<Item> findByOwnerEqualsOrderByIdAsc(Integer ownerId, Pageable pageable);
 
     List<Item> findAllByNameOrDescriptionContainingIgnoreCaseAndAvailableIsTrue(String name, String desc, Pageable pageable);
 

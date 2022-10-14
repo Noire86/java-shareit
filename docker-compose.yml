@@ -22,7 +22,7 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=root
   db:
-    image: postgres:13.8-alpine
+    image: postgres:14-alpine
     container_name: shareit_postgres
     ports:
       - "6541:5432"
